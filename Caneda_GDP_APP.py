@@ -12,7 +12,7 @@ from sklearn.preprocessing import PolynomialFeatures
 # -------------------------
 # Load Dataset
 # -------------------------
-df = pd.read_csv("Canada_GDP.csv")   # <-- apna CSV file yaha rakho
+df = pd.read_csv("Canada_GDP_Dataset.csv")   # <-- apna CSV file yaha rakho
 x = df[['Year']]
 y = df['GDP-Per']
 
@@ -77,3 +77,4 @@ ax.legend()
 ax.grid(True)
 
 st.pyplot(fig)
+
