@@ -12,7 +12,7 @@ from sklearn.preprocessing import PolynomialFeatures
 # -------------------------
 # Load Dataset
 # -------------------------
-df = pd.read_csv("Canada_GDP.csv")   # <-- apna CSV file yaha rakho
+df = pd.read_csv("Canada_GDP_Dataset.csv")   # <-- apna CSV file yaha rakho
 x = df[['Year']]
 y = df['GDP-Per']
 
@@ -81,3 +81,4 @@ fig.update_layout(hovermode="x unified")               # Hover effect
 
 # Show Plotly figure in Streamlit
 st.plotly_chart(fig, use_container_width=True)
+
