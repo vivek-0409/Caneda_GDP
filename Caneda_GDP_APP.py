@@ -5,6 +5,22 @@ import plotly.express as px
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 
+df = pd.read_csv("Canada_GDP_Dataset.csv")  
+x = df[['Year']]
+y = df['GDP-Per']
+
+# Lookup dictionary for exact values
+gdp_lookup = dict(zip(df['Year'], df['GDP-Per']))
+
+
+poly = PolynomialFeatures(degree=4)   # Degree change kar sakte ho
+x_poly = poly.fit_transform(x)
+
+model = LinearRegression()
+model.fit(x_poly, y)
+
+
+st.set_page_config(page_title="Canada GDP Prediction", layout="centered")
 
 st.markdown(
     """
@@ -27,28 +43,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-
-
-df = pd.read_csv("Canada_GDP_Dataset.csv")   # <-- apna CSV file yaha rakho
-x = df[['Year']]
-y = df['GDP-Per']
-
-# Lookup dictionary for exact values
-gdp_lookup = dict(zip(df['Year'], df['GDP-Per']))
-
-
-poly = PolynomialFeatures(degree=4)   # Degree change kar sakte ho
-x_poly = poly.fit_transform(x)
-
-model = LinearRegression()
-model.fit(x_poly, y)
-
-
-st.set_page_config(page_title="Canada GDP Prediction", layout="centered")
-
-st.title("📈 Canada GDP Per Capita Prediction")
-st.markdown("This app uses **Polynomial Regression** to predict GDP per capita of Canada.")
 
 # Show dataset
 if st.checkbox("📂 Show Raw Data"):
@@ -93,4 +87,5 @@ fig.update_layout(hovermode="x unified")               # Hover effect
 
 # Show Plotly figure in Streamlit
 st.plotly_chart(fig, use_container_width=True)
+
 
