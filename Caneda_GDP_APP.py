@@ -1,18 +1,18 @@
-# Canada GDP Prediction with Streamlit
+# Canada GDP Prediction with Streamlit + Plotly
 # Requirements:
-# pip install streamlit scikit-learn matplotlib pandas numpy
+# pip install streamlit scikit-learn pandas numpy plotly
 
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 import streamlit as st
+import plotly.express as px
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 
 # -------------------------
 # Load Dataset
 # -------------------------
-df = pd.read_csv("Canada_GDP_Dataset.csv")   # <-- apna CSV file yaha rakho
+df = pd.read_csv("Canada_GDP.csv")   # <-- apna CSV file yaha rakho
 x = df[['Year']]
 y = df['GDP-Per']
 
@@ -41,7 +41,8 @@ if st.checkbox("📂 Show Raw Data"):
     st.write(df)
 
 # Year input from user
-year_input = st.number_input("Enter a Year to get GDP:", min_value=int(df['Year'].min()), 
+year_input = st.number_input("Enter a Year to get GDP:", 
+                             min_value=int(df['Year'].min()), 
                              max_value=2100, step=1)
 
 # Prediction function
@@ -58,23 +59,25 @@ if st.button("🔮 Predict GDP"):
     st.success(result)
 
 # -------------------------
-# Plotting Graph
+# Interactive Plotly Chart
 # -------------------------
-fig, ax = plt.subplots(figsize=(10, 5))
-
-# Scatter plot (actual values)
-ax.scatter(x, y, color='blue', label="Actual GDP", marker='*')
-
-# Prediction curve
 x_range = np.linspace(x.min(), x.max(), 200).reshape(-1, 1)
 y_pred = model.predict(poly.transform(x_range))
-ax.plot(x_range, y_pred, color='red', label="Polynomial Prediction")
 
-ax.set_xlabel("Year")
-ax.set_ylabel("GDP Per Capita")
-ax.set_title("Canada GDP Per Capita Prediction")
-ax.legend()
-ax.grid(True)
+# Create Plotly figure
+fig = px.scatter(df, x="Year", y="GDP-Per", 
+                 title="Canada GDP Per Capita (Actual vs Predicted)",
+                 labels={"Year": "Year", "GDP-Per": "GDP Per Capita (US $)"},
+                 hover_data={"Year": True, "GDP-Per": ":.2f"},
+                 color_discrete_sequence=["blue"])
 
-st.pyplot(fig)
+# Add polynomial regression line
+fig.add_traces(px.line(x=x_range.flatten(), y=y_pred, 
+                       labels={"x": "Year", "y": "Predicted GDP"},
+                       color_discrete_sequence=["red"]).data)
 
+fig.update_traces(marker=dict(size=8, symbol="star"))  # Actual data stars
+fig.update_layout(hovermode="x unified")               # Hover effect
+
+# Show Plotly figure in Streamlit
+st.plotly_chart(fig, use_container_width=True)
