@@ -6,9 +6,6 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 
 
-st.set_page_config(page_title="Canada GDP Prediction", layout="centered")
-
-
 st.markdown(
     """
     <style>
@@ -40,18 +37,14 @@ y = df['GDP-Per']
 # Lookup dictionary for exact values
 gdp_lookup = dict(zip(df['Year'], df['GDP-Per']))
 
-# -------------------------
-# Polynomial Regression Model
-# -------------------------
+
 poly = PolynomialFeatures(degree=4)   # Degree change kar sakte ho
 x_poly = poly.fit_transform(x)
 
 model = LinearRegression()
 model.fit(x_poly, y)
 
-# -------------------------
-# Streamlit UI
-# -------------------------
+
 st.set_page_config(page_title="Canada GDP Prediction", layout="centered")
 
 st.title("📈 Canada GDP Per Capita Prediction")
@@ -79,9 +72,7 @@ if st.button("🔮 Predict GDP"):
     result = predict_gdp(int(year_input))
     st.success(result)
 
-# -------------------------
-# Interactive Plotly Chart
-# -------------------------
+
 x_range = np.linspace(x.min(), x.max(), 200).reshape(-1, 1)
 y_pred = model.predict(poly.transform(x_range))
 
@@ -102,3 +93,4 @@ fig.update_layout(hovermode="x unified")               # Hover effect
 
 # Show Plotly figure in Streamlit
 st.plotly_chart(fig, use_container_width=True)
+
