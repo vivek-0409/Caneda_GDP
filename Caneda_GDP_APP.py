@@ -22,7 +22,7 @@ st.markdown(
       font-size: 40px;
       font-weight: bold;
       text-align: center;
-      animation: colorchange 3s infinite;
+      animation: colorchange 1s infinite;
     }
     </style>
     <h1 class="animated-title">📈 Canada GDP Per Capita Prediction</h1>
@@ -35,67 +35,43 @@ st.markdown("This app uses **Polynomial Regression** to predict GDP per capita o
 
 uploaded_file = st.file_uploader("Canada_GDP_Dataset.csv file", type="csv")
 
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    st.success("✅ File uploaded successfully!")
+if st.checkbox("📂 Show Raw Data"):
+    st.write(df)
 
-    x = df[['Year']]
-    y = df['GDP-Per']
+# Year input from user
+year_input = st.number_input("Enter a Year to get GDP:", 
+                             min_value=int(df['Year'].min()), 
+                             max_value=2100, step=1)
 
-    # Lookup dictionary
-    gdp_lookup = dict(zip(df['Year'], df['GDP-Per']))
+# Prediction function
+def predict_gdp(year):
+    if year in gdp_lookup:
+        return f"✅ Year {year}: Actual GDP = {gdp_lookup[year]}"
+    else:
+        year_poly = poly.transform([[year]])
+        pred = model.predict(year_poly)[0]
+        return f"📌 Year {year}: Predicted GDP (by model) = {pred:.2f}"
 
-    # Polynomial Regression
-    poly = PolynomialFeatures(degree=4)
-    x_poly = poly.fit_transform(x)
-    model = LinearRegression()
-    model.fit(x_poly, y)
+if st.button("🔮 Predict GDP"):
+    result = predict_gdp(int(year_input))
+    st.success(result)
 
-    # Show dataset
-    if st.checkbox("📊 Show Raw Data"):
-        st.write(df)
+x_range = np.linspace(x.min(), x.max(), 200).reshape(-1, 1)
+y_pred = model.predict(poly.transform(x_range))
 
-    # User input for Year
-    year_input = st.number_input("Enter a Year to get GDP:", 
-                                min_value=int(df['Year'].min()), 
-                                max_value=2100, step=1)
 
-    # Prediction function
-    def predict_gdp(year):
-        if year in gdp_lookup:
-            return f"✅ Year {year}: Actual GDP = {gdp_lookup[year]}"
-        else:
-            year_poly = poly.transform([[year]])
-            pred = model.predict(year_poly)[0]
-            return f"📌 Year {year}: Predicted GDP (by model) = {pred:.2f}"
+fig = px.scatter(df, x="Year", y="GDP-Per", 
+                 title="Canada GDP Per Capita (Actual vs Predicted)",
+                 labels={"Year": "Year", "GDP-Per": "GDP Per Capita (US $)"},
+                 hover_data={"Year": True, "GDP-Per": ":.2f"},
+                 color_discrete_sequence=["blue"])
 
-    if st.button("🔮 Predict GDP"):
-        result = predict_gdp(int(year_input))
-        st.success(result)
 
-    # Prediction Curve
-    x_range = np.linspace(x.min(), x.max(), 200).reshape(-1, 1)
-    y_pred = model.predict(poly.transform(x_range))
+fig.add_traces(px.line(x=x_range.flatten(), y=y_pred, 
+                       labels={"x": "Year", "y": "Predicted GDP"},
+                       color_discrete_sequence=["red"]).data)
 
-    # Plotly interactive chart
-    fig = px.scatter(df, x="Year", y="GDP-Per",
-                     title="Canada GDP Per Capita (Actual vs Predicted)",
-                     labels={"Year": "Year", "GDP-Per": "GDP Per Capita (US $)"},
-                     hover_data={"Year": True, "GDP-Per": ":.2f"},
-                     color_discrete_sequence=["#1f77b4"])
+fig.update_traces(marker=dict(size=8, symbol="star"))  # Actual data stars
+fig.update_layout(hovermode="x unified")               # Hover effect
 
-    # Add polynomial regression line
-    fig.add_traces(px.line(x=x_range.flatten(), y=y_pred,
-                           labels={"x": "Year", "y": "Predicted GDP"},
-                           color_discrete_sequence=["#FF5733"]).data)
-
-    fig.update_traces(marker=dict(size=8, symbol="star"))
-    fig.update_layout(hovermode="x unified", 
-                      template="plotly_dark", 
-                      transition_duration=500)
-
-    # Show chart
-    st.plotly_chart(fig, use_container_width=True)
-
-else:
-    st.warning("📌 Please upload your Canada_GDP.csv file to continue.")
+st.plotly_chart(fig, use_container_width=True)
