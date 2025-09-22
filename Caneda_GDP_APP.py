@@ -56,7 +56,7 @@ year_input = st.number_input("Enter a Year to get GDP:",
 # Prediction function
 def predict_gdp(year):
     if year in gdp_lookup:
-        return f"✅ Year {year}: Actual GDP = {gdp_lookup[year]}"
+        return f"✅ Year {year} --> Predict GDP = {gdp_lookup[year]}"
     else:
         year_poly = poly.transform([[year]])
         pred = model.predict(year_poly)[0]
@@ -87,5 +87,6 @@ fig.update_layout(hovermode="x unified")               # Hover effect
 
 # Show Plotly figure in Streamlit
 st.plotly_chart(fig, use_container_width=True)
+
 
 
