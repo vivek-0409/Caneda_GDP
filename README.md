@@ -1,5 +1,8 @@
-🇨🇦 Canada GDP Analysis
+Canada GDP Analysis
 📊 Economic Data Analysis & Visualization Project
+
+**🔗 Live App
+👉 https://canedagdp-zfrexhxdyu6bh5p89ktgrw.streamlit.app/** :- 
 
 Canada GDP Analysis is a data-driven project focused on analyzing and visualizing the Gross Domestic Product (GDP) of Canada over time.
 This project highlights trends, growth patterns, and economic insights using Python and data analysis techniques.
