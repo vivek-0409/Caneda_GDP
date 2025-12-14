@@ -1,4 +1,4 @@
-Canada GDP Analysis
+# Canada GDP Analysis
 📊 Economic Data Analysis & Visualization Project
 
 **🔗 Live App
