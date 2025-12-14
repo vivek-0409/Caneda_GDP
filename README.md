@@ -42,15 +42,28 @@ Caneda_GDP/
 ├── requirements.txt      # Dependencies
 └── README.md             # Project documentation
 
-⚙️ Installation & Usage
- 
-1️⃣ Clone the Repository
-git clone https://github.com/vivek-0409/Caneda_GDP.git
-cd Caneda_GDP 
 
+### How to run it on your own machine (⚙️ Installation & Usage)
+
+1️⃣ Clone the Repository
+git clone 
+   ```
+   https://github.com/vivek-0409/Caneda_GDP.git
+cd Caneda_GDP
+   ```
 
 2️⃣ Install Dependencies
-pip install -r requirements.txt
+
+   ```
+   pip install -r requirements.txt
+   ```
+
+
+3️⃣ Run the Analysis
+
+   ```
+   python analysis.py
+   ```
 
 3️⃣ Run the Analysis
 python analysis.py
