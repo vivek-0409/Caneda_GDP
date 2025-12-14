@@ -43,9 +43,11 @@ Caneda_GDP/
 └── README.md             # Project documentation
 
 ⚙️ Installation & Usage
-''' 1️⃣ Clone the Repository
+ 
+1️⃣ Clone the Repository
 git clone https://github.com/vivek-0409/Caneda_GDP.git
-cd Caneda_GDP ''' 
+cd Caneda_GDP 
+
 
 2️⃣ Install Dependencies
 pip install -r requirements.txt
